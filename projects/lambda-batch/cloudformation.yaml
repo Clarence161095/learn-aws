@@ -67,6 +67,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - codepipeline:*
+                  - sts:AssumeRole
                 Resource: "*"
 
   CodeBuildProject:
