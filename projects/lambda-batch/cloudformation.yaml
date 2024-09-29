@@ -13,7 +13,7 @@ Resources:
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: s3-lambda-sqs-demo-pipeline-CodeBuildServiceRole
+      RoleName: !Sub ${AWS::StackName}-CodeBuildServiceRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -43,7 +43,7 @@ Resources:
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: s3-lambda-sqs-demo-pipeline-CodePipelineServiceRole
+      RoleName: !Sub ${AWS::StackName}-CodePipelineServiceRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -59,6 +59,15 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonSQSFullAccess
         - arn:aws:iam::aws:policy/IAMFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+      Policies:
+        - PolicyName: CodePipelineAdditionalPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - codepipeline:*
+                Resource: "*"
 
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
@@ -122,6 +131,7 @@ Resources:
 
   PipelineArtifactsBucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
     Properties:
       BucketName: !Sub ${AWS::AccountId}-${RepositoryName}-artifacts
       VersioningConfiguration:
