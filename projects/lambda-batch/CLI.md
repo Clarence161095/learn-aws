@@ -1,0 +1,25 @@
+# create stack
+
+```bash
+aws cloudformation create-stack --stack-name s3-lambda-sqs-demo-pipeline --template-body file://cloudformation.yaml --capabilities CAPABILITY_IAM
+```
+
+```bash
+aws cloudformation create-change-set \
+  --stack-name s3-lambda-sqs-demo-pipeline \
+  --template-body file://cloudformation.yaml \
+  --change-set-name update-roles-and-permissions \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+```bash
+aws cloudformation describe-change-set \
+  --stack-name s3-lambda-sqs-demo-pipeline \
+  --change-set-name update-roles-and-permissions
+```
+
+```bash
+aws cloudformation execute-change-set \
+  --stack-name s3-lambda-sqs-demo-pipeline \
+  --change-set-name update-roles-and-permissions
+```
