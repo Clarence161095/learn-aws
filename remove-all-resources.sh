@@ -1,6 +1,7 @@
 #!/bin/bash
 aws apigateway get-rest-apis | jq -r '.items[] | .id' | while read x; do aws apigateway delete-rest-api --rest-api-id $x; done
-aws s3 ls | awk '{print $3}' | while read x; do aws s3 rb s3://$x --force; done
+sh remove-all-s3.sh
+# aws s3 ls | awk '{print $3}' | while read x; do aws s3 rb s3://$x --force; done
 aws lambda list-functions | jq -r '.Functions[] | .FunctionName' | while read x; do aws lambda delete-function --function-name $x; done
 aws sqs list-queues | jq -r '.QueueUrls[]' | while read x; do aws sqs delete-queue --queue-url $x; done
 aws dynamodb list-tables | jq -r '.TableNames[]' | while read x; do aws dynamodb delete-table --table-name $x; done
