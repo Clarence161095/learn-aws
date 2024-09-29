@@ -29,7 +29,7 @@ Resources:
         - arn:aws:iam::aws:policy/IAMFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
       Policies:
-        - PolicyName: CodeBuildCloudWatchLogsPolicy
+        - PolicyName: CodeBuildCodePipelinePolicy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -38,6 +38,7 @@ Resources:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
+                  - codepipeline:*
                 Resource: "*"
 
   CodePipelineServiceRole:
@@ -66,8 +67,8 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - codepipeline:*
                   - sts:AssumeRole
+                  - codepipeline:*
                 Resource: "*"
 
   CodeBuildProject:
