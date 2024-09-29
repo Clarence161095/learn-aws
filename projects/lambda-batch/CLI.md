@@ -1,7 +1,13 @@
 # create stack
 
 ```bash
-aws cloudformation create-stack --stack-name s3-lambda-sqs-demo-pipeline --template-body file://cloudformation.yaml --capabilities CAPABILITY_IAM
+aws cloudformation create-stack --stack-name s3-lambda-sqs-demo-pipeline --template-body file://cloudformation.yaml --capabilities CAPABILITY_NAMED_IAM
+```
+
+delete stack
+
+```bash
+aws cloudformation delete-stack --stack-name s3-lambda-sqs-demo-pipeline
 ```
 
 ```bash
