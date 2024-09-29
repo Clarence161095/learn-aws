@@ -1,0 +1,13 @@
+{
+  "name": "s3-lambda-sqs-demo",
+  "version": "1.0.0",
+  "description": "S3 Lambda SQS Demo",
+  "main": "index.js",
+  "scripts": {
+    "build": "sam build",
+    "deploy": "sam deploy --no-confirm-changeset --no-fail-on-empty-changeset"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1001.0"
+  }
+}

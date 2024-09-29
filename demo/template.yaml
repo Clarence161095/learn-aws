@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: S3 Lambda SQS Demo
+
+Parameters:
+  SQSQueueName:
+    Type: String
+    Default: s3-lambda-sqs-demo-queue
+
+Resources:
+  RCBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::AccountId}-rc-bucket
+
+  ACBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::AccountId}-ac-bucket
+
+  SQSQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Ref SQSQueueName
+
+  RCLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: rcHandler.handler
+      Runtime: nodejs18.x
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref RCBucket
+            Events: s3:ObjectCreated:*
+      Environment:
+        Variables:
+          SQS_QUEUE_URL: !Ref SQSQueue
+
+  ACLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: acHandler.handler
+      Runtime: nodejs18.x
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref ACBucket
+            Events: s3:ObjectCreated:*
+      Environment:
+        Variables:
+          SQS_QUEUE_URL: !Ref SQSQueue
+
+Outputs:
+  RCBucketName:
+    Description: "RC Bucket Name"
+    Value: !Ref RCBucket
+  ACBucketName:
+    Description: "AC Bucket Name"
+    Value: !Ref ACBucket
+  SQSQueueURL:
+    Description: "SQS Queue URL"
+    Value: !Ref SQSQueue
+  RCLambdaFunctionArn:
+    Description: "RC Lambda Function ARN"
+    Value: !GetAtt RCLambdaFunction.Arn
+  ACLambdaFunctionArn:
+    Description: "AC Lambda Function ARN"
+    Value: !GetAtt ACLambdaFunction.Arn
