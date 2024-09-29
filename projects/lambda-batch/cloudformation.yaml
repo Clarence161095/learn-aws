@@ -29,7 +29,7 @@ Resources:
         - arn:aws:iam::aws:policy/IAMFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
       Policies:
-        - PolicyName: CodeBuildCodePipelinePolicy
+        - PolicyName: CodeBuildAdditionalPermissions
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -39,6 +39,10 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                   - codepipeline:*
+                  - iam:PassRole
+                  - s3:*
+                  - codecommit:*
+                  - codebuild:*
                 Resource: "*"
 
   CodePipelineServiceRole:
@@ -69,6 +73,10 @@ Resources:
                 Action:
                   - sts:AssumeRole
                   - codepipeline:*
+                  - iam:PassRole
+                  - s3:*
+                  - codecommit:*
+                  - codebuild:*
                 Resource: "*"
 
   CodeBuildProject:
